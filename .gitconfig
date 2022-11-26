@@ -1,0 +1,15 @@
+[user]
+	email = cperbony@gmail.com
+	name = 'Claudinei Perboni'
+[credential]
+	helper = "!f() { /var/www/.vscode-server/bin/6261075646f055b99068d3688932416f2346dd3b/node /tmp/vscode-remote-containers-f3160d6dfafecb9460769a4f85e76ad64883e3d6.js $*; }; f"
+[push]
+  followTags = true
+[core]
+	editor = code --wait
+[alias]
+  s = !git status -s
+  c = !git add --all && git commit -m
+  l = !git log --pretty=format:'%C(blue)%h %C(red)%d %C(white)%s - %C(cyan)%cn, %C(green)%cr'
+[safe]
+	directory = /home/claudineiperboni/projetos/docker-desenvolvimento/web/api-cadastro

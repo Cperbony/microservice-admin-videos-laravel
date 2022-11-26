@@ -16,4 +16,6 @@ yarn-error.log
 .bash_history
 .docker/dbdata/
 .composer
-
+.vscode-server
+.devcontainer
+.ssh
