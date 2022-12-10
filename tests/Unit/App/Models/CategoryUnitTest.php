@@ -3,32 +3,43 @@
 namespace Tests\Unit\App\Models;
 
 use App\Models\Category;
-use PHPUnit\Framework\TestCase;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Tests\Unit\App\Models\ModelTestCase;
 
-class CategoryUnitTest extends TestCase
+class CategoryUnitTest extends ModelTestCase
 {
     protected function model(): Model
     {
         return new Category();
     }
 
-    public function testIfUseTraits()
+    protected function traits(): array
     {
-        $traitsNeeds = [
+        return [
             HasFactory::class,
             SoftDeletes::class,
         ];
-
-        dump(class_uses($this->model()));
-
-        dump(array_keys(class_uses($this->model())));
-
-        $traitsUsed = array_keys(class_uses($this->model()));
-        $this->assertTrue(true);
-
-        $this->assertEquals($traitsNeeds, $traitsUsed);
     }
+
+    protected function fillables(): array
+    {
+        return [
+            'id',
+            'name',
+            'description',
+            'is_active',
+        ];
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'id' => 'string',
+            'is_active' => 'boolean',
+            'deleted_at' => 'datetime',
+        ];
+    }
+
 }
