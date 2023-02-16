@@ -2,12 +2,12 @@
 
 namespace App\Repositories\Eloquent;
 
-use Core\Domain\Entity\Category;
 use App\Models\Category as Model;
-use Core\Domain\Exception\NotFoundException;
-use Core\Domain\Repository\PaginationInterface;
 use App\Repositories\Presenters\PaginationPresenters;
+use Core\Domain\Entity\Category;
+use Core\Domain\Exception\NotFoundException;
 use Core\Domain\Repository\CategoryRepositoryInterface;
+use Core\Domain\Repository\PaginationInterface;
 
 class CategoryEloquentRepository implements CategoryRepositoryInterface
 {
@@ -36,31 +36,22 @@ class CategoryEloquentRepository implements CategoryRepositoryInterface
 
     public function findById(string $categoryId): Category
     {
-        $category = $this->model->find($categoryId);
-
-        // dd($category);
-
-        if(empty($category)) {
+        if (!$category = $this->model->find($categoryId)) {
             throw new NotFoundException();
         }
 
         return $this->toCategory($category);
     }
 
-    public function getIdsListIds(array $categoryIds = []): array
-    {
-
-    }
-
     public function findAll(string $filter = '', $order = 'DESC'): array
     {
         $categories = $this->model
-        ->where(function ($query) use ($filter){
-            if($filter) {
-                $query->where('name', 'LIKE', "%{$filter}%");
-            }
+            ->where(function ($query) use ($filter) {
+                if ($filter) {
+                    $query->where('name', 'LIKE', "%{$filter}%");
+                }
 
-        })->orderBy('id', $order)->get();
+            })->orderBy('id', $order)->get();
 
         return $categories->toArray();
     }
@@ -82,23 +73,36 @@ class CategoryEloquentRepository implements CategoryRepositoryInterface
 
     public function update(Category $category): Category
     {
+        if (!$categoryDb = $this->model->find($category->id)) {
+            throw new NotFoundException('categoria não encontrada');
+        }
 
-        return new Category(
-            name: 'update Category',
-        );
+        $categoryDb->update([
+            'name' => $category->name,
+            'description' => $category->description,
+            'is_active' => $category->isActive,
+        ]);
+
+        $categoryDb->refresh();
+
+        return $this->toCategory($categoryDb);
     }
 
     public function delete(string $categoryId): bool
     {
-        return true;
+        if (!$categoryDb = $this->model->find($categoryId)) {
+            throw new NotFoundException('categoria não encontrada');
+        }
+
+        return $categoryDb->delete();
     }
 
     private function toCategory(object $object): Category
     {
 
         return new Category(
-            id: $object->id,
-            name: $object->name,
+            id:$object->id,
+            name:$object->name,
         );
     }
 

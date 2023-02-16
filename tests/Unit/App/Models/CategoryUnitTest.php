@@ -2,11 +2,12 @@
 
 namespace Tests\Unit\App\Models;
 
+
 use App\Models\Category;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Tests\Unit\App\Models\ModelTestCase;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CategoryUnitTest extends ModelTestCase
 {
@@ -33,11 +34,12 @@ class CategoryUnitTest extends ModelTestCase
         ];
     }
 
+    // TODO:teste plugin
     protected function casts(): array
     {
         return [
-            'id' => 'string',
-            'is_active' => 'boolean',
+            'id'         => 'string',
+            'is_active'  => 'boolean',
             'deleted_at' => 'datetime',
         ];
     }

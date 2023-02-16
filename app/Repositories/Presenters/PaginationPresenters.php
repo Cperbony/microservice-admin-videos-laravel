@@ -14,10 +14,11 @@ class PaginationPresenters implements PaginationInterface
     protected array $items = [];
 
     public function __construct(
-        protected LengthAwarePaginator $paginator)
+        protected LengthAwarePaginator $paginator
+    )
     {
         $this->items = $this->resolveItems(
-            items: $this->paginator->items()
+        items: $this->paginator->items()
         );
     }
 
@@ -25,42 +26,42 @@ class PaginationPresenters implements PaginationInterface
 
     public function items(): array
     {
-    return $this->items;
+        return $this->items;
     }
 
     public function total(): int
     {
-    return $this->paginator->total();
+        return $this->paginator->total();
     }
 
     public function lastPage(): int
     {
-    return $this->paginator->lastPage();
+        return $this->paginator->lastPage();
     }
 
     public function firstPage(): int
     {
-    return $this->paginator->firstItem();
+        return $this->paginator->firstItem();
     }
 
     public function currentPage(): int
     {
-    return $this->paginator->currentPage();
+        return $this->paginator->currentPage();
     }
 
     public function perPage(): int
     {
-    return $this->paginator->perPage();
+        return $this->paginator->perPage();
     }
 
     public function to(): int
     {
-    return $this->paginator->firstItem();
+        return $this->paginator->firstItem();
     }
 
     public function from(): int
     {
-    return $this->paginator->lastItem();
+        return $this->paginator->lastItem();
     }
 
     protected function resolveItems(array $items)
@@ -71,7 +72,7 @@ class PaginationPresenters implements PaginationInterface
             $stdClass = new stdClass();
 
             foreach ($item->toArray() as $key => $value) {
-                $stdClass ->{$key} = $value;
+                $stdClass->{$key} = $value;
             }
 
             array_push($response, $stdClass);
