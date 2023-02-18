@@ -15,16 +15,15 @@ class DeleteCategoryUseCase
     public function __construct(CategoryRepositoryInterface $repository)
     {
         $this->repository = $repository;
-
     }
-    
+
     public function execute(CategoryInputDTO $input): CategoryDeleteOutputDTO
     {
         $responseDelete = $this->repository->delete($input->id);
-        
+
         return new CategoryDeleteOutputDTO(
            success: $responseDelete
         );
-        
+
     }
 }

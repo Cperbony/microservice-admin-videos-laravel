@@ -22,11 +22,11 @@ class CategoryEloquentRepository implements CategoryRepositoryInterface
     {
         $category = $this->model->create(
             [
-                'id' => $category->id,
-                'name' => $category->name,
+                'id'          => $category->id,
+                'name'        => $category->name,
                 'description' => $category->description,
-                'is_active' => $category->isActive,
-                'created_at' => $category->createdAt(),
+                'is_active'   => $category->isActive,
+                'created_at'  => $category->createdAt(),
             ]
         );
 
@@ -78,9 +78,9 @@ class CategoryEloquentRepository implements CategoryRepositoryInterface
         }
 
         $categoryDb->update([
-            'name' => $category->name,
+            'name'        => $category->name,
             'description' => $category->description,
-            'is_active' => $category->isActive,
+            'is_active'   => $category->isActive,
         ]);
 
         $categoryDb->refresh();
@@ -99,11 +99,15 @@ class CategoryEloquentRepository implements CategoryRepositoryInterface
 
     private function toCategory(object $object): Category
     {
-
-        return new Category(
-            id:$object->id,
-            name:$object->name,
+        $entity = new Category(
+            id: $object->id,
+            name: $object->name,
+            description: $object->description,
         );
+
+        ((bool) $object->is_active) ? $entity->activate() : $entity->disable();
+
+        return $entity;
     }
 
 }

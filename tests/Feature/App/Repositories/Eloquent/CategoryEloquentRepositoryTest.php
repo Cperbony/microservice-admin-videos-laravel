@@ -55,7 +55,6 @@ class CategoryEloquentRepositoryTest extends TestCase
     {
         try {
             $test = $this->repository->findById('fakevalue');
-            // dump($test);
             $this->assertTrue(false);
         }
         catch (Throwable $th) {
@@ -107,7 +106,6 @@ class CategoryEloquentRepositoryTest extends TestCase
 
         $response = $this->repository->update($category);
 
-        // dd($categoryDb );
         $this->assertInstanceOf(EntityCategory::class, $response);
         $this->assertNotEquals($category->name, $categoryDb->name);
         $this->assertEquals('Updated Name', $response->name);

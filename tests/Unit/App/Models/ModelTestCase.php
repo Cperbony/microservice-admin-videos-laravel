@@ -31,7 +31,6 @@ abstract class ModelTestCase extends TestCase
         $expected = $this->fillables();
 
         $fillable = $this->model()->getFillable();
-        // dd($fillable);
 
         $this->assertEquals($expected, $fillable);
     }
