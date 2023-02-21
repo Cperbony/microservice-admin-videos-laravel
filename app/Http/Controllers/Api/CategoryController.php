@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use Core\UseCase\Category\ListCategoryUseCase;
+use Core\UseCase\DTO\Category\CategoryInputDTO;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
@@ -51,6 +53,13 @@ class CategoryController extends Controller
         return (new CategoryResource(collect($response)))
         ->response()
         ->setStatusCode(Response::HTTP_CREATED);
+    }
 
+    public function show(ListCategoryUseCase $useCase, $id)
+    {
+        $category = $useCase->execute(new CategoryInputDTO($id));
+
+        return (new CategoryResource(collect($category)))
+        ->response();
     }
 }

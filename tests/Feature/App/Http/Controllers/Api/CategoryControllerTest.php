@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\App\Http\Controllers\Api;
 
-use Symfony\Component\HttpFoundation\ParameterBag;
 use Tests\TestCase;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -10,10 +9,12 @@ use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\StoreCategoryRequest;
 use Illuminate\Foundation\Testing\WithFaker;
+use Core\UseCase\Category\ListCategoryUseCase;
 use App\Http\Controllers\Api\CategoryController;
 use Core\UseCase\Category\CreateCategoryUseCase;
 use Core\UseCase\Category\ListCategoriesUseCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use App\Repositories\Eloquent\CategoryEloquentRepository;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -56,6 +57,20 @@ class CategoryControllerTest extends TestCase
 
         $this->assertInstanceOf(JsonResponse::class, $response);
         $this->assertEquals(Response::HTTP_CREATED, $response->status());
+    }
+
+    public function test_show()
+    {
+        $category = Category::factory()->create();
+
+        $response = $this->controller->show(
+        useCase: new ListCategoryUseCase($this->repository),
+        id: $category->id,
+        );
+
+        $this->assertEquals(Response::HTTP_OK, $response->status());
+        $this->assertInstanceOf(JsonResponse::class, $response);
+
     }
 
 }
