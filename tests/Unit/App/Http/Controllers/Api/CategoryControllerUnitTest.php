@@ -18,7 +18,14 @@ class CategoryControllerUnitTest extends TestCase
             ->andReturn('teste');
 
         $mockDtoOutput = Mockery::mock(ListCategoriesOutputDTO::class, [
-            [], 1, 1, 1, 1, 1, 1, 1
+            [],
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
         ]);
 
         $mockUseCase = Mockery::mock(ListCategoriesUseCase::class);
@@ -27,14 +34,25 @@ class CategoryControllerUnitTest extends TestCase
 
 
         $controller = new CategoryController();
-        $response = $controller->index($mockRequest, $mockUseCase);
+        $response   = $controller->index($mockRequest, $mockUseCase);
 
         // dd($response);
 
         $this->assertIsObject($response->resource);
-        $this->assertArrayHasKey('meta' , $response->additional);
+        $this->assertArrayHasKey('meta', $response->additional);
+        // $this->assertTrue(true);
 
+        /**
+         * spies
+         */
+        $mockUseCaseSpy = Mockery::spy(ListCategoriesUseCase::class);
+        $mockUseCaseSpy->shouldReceive('execute')->andReturn($mockDtoOutput, $mockUseCase);
 
-        $this->assertTrue(true);
+        $response = $controller->index($mockRequest, $mockUseCaseSpy);
+
+        $mockUseCaseSpy->shouldReceive('execute');
+
+        Mockery::close();
+
     }
 }
