@@ -2,7 +2,7 @@
 
 namespace Core\UseCase\DTO\Category\ListCategories;
 
-class ListCategoriesOutputDTO 
+class ListCategoriesOutputDTO
 {
     public function __construct(
         public array $items,
@@ -15,6 +15,6 @@ class ListCategoriesOutputDTO
         public int $from
     )
     {
-        
+
     }
 }

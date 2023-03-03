@@ -18,26 +18,17 @@ class ListCategoriesUseCase
         $this->repository = $repository;
 
     }
-    
+
     public function execute(ListCategoriesInputDTO $input): ListCategoriesOutputDTO
     {
         $categories = $this->repository->paginate(
-            filter: $input->filter, 
-            order: $input->order,
-            page: $input->page,
-            totalPage: $input->totalPage,
+        filter: $input->filter,
+        order: $input->order,
+        page: $input->page,
+        totalPage: $input->totalPage,
         );
-        
+
         return new ListCategoriesOutputDTO(
-            // MAPEAR CO ARRAY-MAP, RETORNANDO SOMENTE O DESEJADO
-            // items: array_map(function ($data) {
-            //     return [
-            //         'id' => $data->id,
-            //         'name' => $data->name,
-            //         'description' => $data->description,
-            //         'is_active' => $data->is_active,
-            //     ];
-            // }),
             items: $categories->items(),
             total: $categories->total(),
             current_page: $categories->currentPage(),
@@ -47,6 +38,5 @@ class ListCategoriesUseCase
             to: $categories->to(),
             from: $categories->from(),
         );
-        
     }
 }

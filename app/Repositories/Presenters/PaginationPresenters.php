@@ -22,8 +22,6 @@ class PaginationPresenters implements PaginationInterface
         );
     }
 
-
-
     public function items(): array
     {
         return $this->items;

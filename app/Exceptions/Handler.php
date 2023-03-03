@@ -2,8 +2,11 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Core\Domain\Exception\EntityValidationException;
 use Throwable;
+use Illuminate\Http\Response;
+use Core\Domain\Exception\NotFoundException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
 {
@@ -37,5 +40,28 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function render($request, Throwable $exception)
+    {
+        if ($exception instanceof (NotFoundException::class)) {
+            return $this->showError($exception->getMessage(), Response::HTTP_NOT_FOUND);
+        }
+
+        if ($exception instanceof (EntityValidationException::class)) {
+            return $this->showError($exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    public function showError(string $message, int $statusCode)
+    {
+        return response()->json(
+            [
+                'message' => $message,
+            ],
+            $statusCode
+        );
+
     }
 }

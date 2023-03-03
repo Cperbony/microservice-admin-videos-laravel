@@ -24,18 +24,19 @@ class CategoryController extends Controller
     public function index(Request $request, ListCategoriesUseCase $useCase)
     {
         $response = $useCase->execute(
-            input:new ListCategoriesInputDTO(
-                filter:$request->get('filter', ''),
-                order:$request->get('page', 'DESC'),
-                page:(int) $request->get('page', 1),
-                totalPage:(int) $request->get('total_page', 15),
+            input: new ListCategoriesInputDTO(
+                filter: $request->get('filter', ''),
+                order: $request->get('order', 'DESC'),
+                page: (int) $request->get('page', 1),
+                totalPage: (int) $request->get('total_page', 15),
             )
         );
 
         return CategoryResource::collection(collect($response->items))
             ->additional([
                 'meta' => [
-                    'totalPage' => $response->total,
+                    'total' => $response->total,
+                    'current_page' => $response->current_page,
                     'last_page' => $response->last_page,
                     'first_page' => $response->first_page,
                     'per_page' => $response->per_page,

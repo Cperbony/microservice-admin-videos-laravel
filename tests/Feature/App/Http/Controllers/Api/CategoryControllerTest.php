@@ -78,6 +78,8 @@ class CategoryControllerTest extends TestCase
     {
         $category = Category::factory()->create();
 
+        // dd("Category ", $category->id);
+
         $request = new UpdateCategoryRequest();
         $request->headers->set('content-type', 'application/json');
         $request->setJson(new ParameterBag([
@@ -86,8 +88,8 @@ class CategoryControllerTest extends TestCase
 
         $response = $this->controller->update(
         request: $request,
-        useCase: new UpdateCategoryUseCase($this->repository),
         id: $category->id,
+        useCase: new UpdateCategoryUseCase($this->repository)
         );
 
         $this->assertEquals(Response::HTTP_OK, $response->status());
