@@ -10,7 +10,24 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CategoryApiTest extends TestCase
 {
-    protected $endpoint = '/api/categories';
+    protected $endpoint;
+    protected $dataJsonSctructure;
+    protected function setUp(): void
+    {
+        $this->endpoint           = '/api/categories';
+        $this->dataJsonSctructure = [
+            'data' => [
+                'id',
+                'name',
+                'description',
+                'is_active',
+                'created_at'
+            ]
+        ];
+
+        parent::setUp();
+    }
+    //protected $endpoint = '/api/categories';
     public function test_list_empty_categories()
     {
         $response = $this->getJson($this->endpoint);
@@ -63,15 +80,7 @@ class CategoryApiTest extends TestCase
         $response = $this->getJson("$this->endpoint/{$category->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $response->assertJsonStructure([
-            'data' => [
-                'id',
-                'name',
-                'description',
-                'is_active',
-                'created_at',
-            ]
-        ]);
+        $response->assertJsonStructure($this->dataJsonSctructure);
 
         $this->assertEquals($category->id, $response['data']['id']);
     }
@@ -79,7 +88,6 @@ class CategoryApiTest extends TestCase
     public function test_validations_store()
     {
         $data     = [];
-        $category = Category::factory()->create();
         $response = $this->postJson($this->endpoint, $data);
 
         //dd($response);
@@ -87,6 +95,33 @@ class CategoryApiTest extends TestCase
         $response->assertJsonStructure([
             'message',
             'errors' => ['name'],
+        ]);
+    }
+
+    public function test_store()
+    {
+        $data = [
+            'name' => 'New category name'
+        ];
+
+        $response = $this->postJson($this->endpoint, $data);
+
+        //dd($response);
+        $response->assertStatus(Response::HTTP_CREATED);
+        $response->assertJsonStructure($this->dataJsonSctructure);
+
+        $response = $this->postJson($this->endpoint, [
+            'name' => 'New Category Store',
+            'description' => 'New description for new category',
+            'is_active' => false
+        ]);
+
+        $response->assertStatus(Response::HTTP_CREATED);
+        $this->assertEquals('New Category Store', $response['data']['name']);
+        $this->assertEquals('New description for new category', $response['data']['description']);
+        $this->assertDatabaseHas('categories', [
+            'id' => $response['data']['id'],
+            'is_active' => false
         ]);
 
     }
