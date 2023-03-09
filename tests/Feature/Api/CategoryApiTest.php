@@ -12,6 +12,7 @@ class CategoryApiTest extends TestCase
 {
     protected $endpoint;
     protected $dataJsonSctructure;
+    protected $paginateStructure;
     protected function setUp(): void
     {
         $this->endpoint           = '/api/categories';
@@ -25,6 +26,18 @@ class CategoryApiTest extends TestCase
             ]
         ];
 
+        $this->paginateStructure = [
+                'meta' => [
+                    'total',
+                    'current_page',
+                    'last_page',
+                    'first_page',
+                    'per_page',
+                    'to',
+                    'from'
+                ]
+        ];
+
         parent::setUp();
     }
     //protected $endpoint = '/api/categories';
@@ -33,6 +46,7 @@ class CategoryApiTest extends TestCase
         $response = $this->getJson($this->endpoint);
 
         $response->assertStatus(200);
+        $response->assertJsonCount(0, 'data');
     }
 
     public function test_list_all_categories()
@@ -42,17 +56,8 @@ class CategoryApiTest extends TestCase
         $response = $this->getJson($this->endpoint);
 
         $response->assertStatus(200);
-        $response->assertJsonStructure([
-            'meta' => [
-                'total',
-                'current_page',
-                'last_page',
-                'first_page',
-                'per_page',
-                'to',
-                'from'
-            ]
-        ]);
+        $response->assertJsonStructure($this->paginateStructure);
+        $response->assertJsonCount(15, 'data');
     }
 
     public function test_list_paginate_categories()
@@ -65,6 +70,9 @@ class CategoryApiTest extends TestCase
 
         $response->assertStatus(200);
         $this->assertEquals(2, $response->getData()->meta->current_page);
+        $this->assertEquals(30, $response->getData()->meta->total);
+        $this->assertEquals(30, $response['meta']['total']);
+        $response->assertJsonCount(15, 'data');
     }
 
     public function test_list_category_not_found()
