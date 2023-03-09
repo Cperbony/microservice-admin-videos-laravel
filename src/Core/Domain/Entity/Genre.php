@@ -21,13 +21,12 @@ class Genre
      */
 
     public function __construct(
-        protected Uuid|string $id = '',
-        protected string $name = '',
-        protected string $description = '',
+        protected string $name,
+        protected ?Uuid $id = null,
         protected bool $isActive = true,
-        protected DateTime|null $createdAt = null
+        protected ?DateTime $createdAt = null
     ) {
-        $this->id = $this->id ? $this->id : Uuid::random();
+        $this->id = $this->id ?? Uuid::random();
         $this->createdAt = $this->createdAt ?? new DateTime();
 
         //$this->validate();
