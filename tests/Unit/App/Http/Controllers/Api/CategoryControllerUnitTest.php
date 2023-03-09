@@ -18,14 +18,7 @@ class CategoryControllerUnitTest extends TestCase
             ->andReturn('teste');
 
         $mockDtoOutput = Mockery::mock(ListCategoriesOutputDTO::class, [
-            [],
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
+            [], 1, 1, 1, 1, 1, 1, 1
         ]);
 
         $mockUseCase = Mockery::mock(ListCategoriesUseCase::class);
