@@ -52,6 +52,8 @@ class Handler extends ExceptionHandler
             return $this->showError($exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
+        return parent::render($request, $exception);
+
     }
 
     public function showError(string $message, int $statusCode)
