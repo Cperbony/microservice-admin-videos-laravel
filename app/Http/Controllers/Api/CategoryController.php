@@ -56,7 +56,7 @@ class CategoryController extends Controller
             )
         );
 
-        return (new CategoryResource(collect($response)))
+        return (new CategoryResource($response))
             ->response()
             ->setStatusCode(Response::HTTP_CREATED);
     }
@@ -65,7 +65,9 @@ class CategoryController extends Controller
     {
         $category = $useCase->execute(new CategoryInputDTO($id));
 
-        return (new CategoryResource(collect($category)))
+        //dd(collect($category));
+
+        return (new CategoryResource($category))
             ->response();
     }
 
@@ -76,7 +78,7 @@ class CategoryController extends Controller
             name: $request->name
         ));
 
-        return (new CategoryResource(collect($response)))
+        return (new CategoryResource($response))
             ->response();
     }
 

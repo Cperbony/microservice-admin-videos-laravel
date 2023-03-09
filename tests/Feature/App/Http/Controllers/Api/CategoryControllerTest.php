@@ -78,7 +78,7 @@ class CategoryControllerTest extends TestCase
     {
         $category = Category::factory()->create();
 
-        // dd("Category ", $category->id);
+        // dd("Category test_update ", $category->id);
 
         $request = new UpdateCategoryRequest();
         $request->headers->set('content-type', 'application/json');
