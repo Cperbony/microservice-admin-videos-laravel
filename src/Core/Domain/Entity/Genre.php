@@ -32,6 +32,22 @@ class Genre
         //$this->validate();
     }
 
+    public function activate()
+    {
+        $this->isActive = true;
+
+    }
+
+    public function deactivate()
+    {
+        $this->isActive = false;
+    }
+
+    public function update(string $name)
+    {
+        $this->name = $name;
+    }
+
     //public function activate(): void
     //{
     //    $this->isActive = true;
