@@ -29,7 +29,7 @@ class Genre
         $this->id = $this->id ?? Uuid::random();
         $this->createdAt = $this->createdAt ?? new DateTime();
 
-        //$this->validate();
+        $this->validate();
     }
 
     public function activate()
@@ -46,35 +46,16 @@ class Genre
     public function update(string $name)
     {
         $this->name = $name;
+        $this->validate();
     }
 
-    //public function activate(): void
-    //{
-    //    $this->isActive = true;
-    //}
-
-    //public function disable(): void
-    //{
-    //    $this->isActive = false;
-    //}
-
-    ///**
-    // * @throws EntityValidationException
-    // */
-    //public function update(string $name, string $description = '')
-    //{
-    //    $this->name = $name;
-    //    $this->description = $description;
-    //    $this->validate();
-    //}
-
-
-    //private function validate()
-    //{
-    //    // DomainValidation::notNull($this->name);
-    //    DomainValidation::strMaxLength($this->name);
-    //    // DomainValidation::strMinLength($this->description);
-    //    DomainValidation::strCanNullAndMaxlength($this->description, 255);
-    //}
-
+    /**
+    * @throws EntityValidationException
+    */
+   protected function validate()
+   {
+       // DomainValidation::notNull($this->name);
+       DomainValidation::strMaxLength($this->name);
+       DomainValidation::strMinLength($this->name);
+   }
 }
