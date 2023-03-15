@@ -2,12 +2,11 @@
 
 namespace Tests\Unit\Domain\Entity;
 
-use Core\Domain\Exception\EntityValidationException;
-use DateTime;
-use DomainException;
 use Core\Domain\Entity\Genre;
-use PHPUnit\Framework\TestCase;
+use Core\Domain\Exception\EntityValidationException;
 use Core\Domain\ValueObject\Uuid;
+use DateTime;
+use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid as RamseyUuid;
 
 class GenreUnitTest extends TestCase
@@ -23,10 +22,10 @@ class GenreUnitTest extends TestCase
         $date = date('Y-m-d H:i:s');
 
         $genre = new Genre(
-            id: new Uuid($uuid),
-            name: 'New Genre',
-            isActive: true,
-            createdAt: new DateTime($date)
+            id:new Uuid($uuid),
+            name:'New Genre',
+            isActive:true,
+            createdAt:new DateTime($date)
         );
 
         $this->assertEquals($uuid, $genre->id);
@@ -38,8 +37,8 @@ class GenreUnitTest extends TestCase
     public function testAttributesCreate()
     {
         $genre = new Genre(
-            name: 'New Update Genre',
-            isActive: false
+            name:'New Update Genre',
+            isActive:false
         );
 
         $this->assertNotEmpty($genre->id());
@@ -50,7 +49,7 @@ class GenreUnitTest extends TestCase
     public function testCreateActivated()
     {
         $genre = new Genre(
-        name: 'Teste'
+            name:'Teste'
         );
 
         $this->assertEquals(true, $genre->isActive);
@@ -60,7 +59,7 @@ class GenreUnitTest extends TestCase
     public function testDeactivated()
     {
         $genre = new Genre(
-        name: 'Teste'
+            name:'Teste'
         );
 
         $this->assertTrue($genre->isActive);
@@ -74,8 +73,8 @@ class GenreUnitTest extends TestCase
     public function testActivated()
     {
         $genre = new Genre(
-        name: 'Teste',
-        isActive: false
+            name:'Teste',
+            isActive:false
         );
 
         $this->assertFalse($genre->isActive);
@@ -89,13 +88,13 @@ class GenreUnitTest extends TestCase
     public function testUpdate()
     {
         $genre = new Genre(
-        name: 'Teste'
+            name:'Teste'
         );
 
         $this->assertEquals('Teste', $genre->name);
 
         $genre->update(
-        name: 'new Genre Update'
+            name:'new Genre Update'
         );
 
         $this->assertEquals('new Genre Update', $genre->name);
@@ -106,7 +105,7 @@ class GenreUnitTest extends TestCase
         $this->expectException(EntityValidationException::class);
 
         $genre = new Genre(
-        name: 'S'
+            name:'S'
         );
     }
 
@@ -118,14 +117,60 @@ class GenreUnitTest extends TestCase
         $date = date('Y-m-d H:i:s');
 
         $genre = new Genre(
-            id: new Uuid($uuid),
-            name: 'New Genre',
-            isActive: true,
-            createdAt: new DateTime($date)
+            id:new Uuid($uuid),
+            name:'New Genre',
+            isActive:true,
+            createdAt:new DateTime($date)
         );
 
         $genre->update(
-        name: 's'
+            name:'s'
         );
+    }
+
+    public function testAddCategoryToGenre()
+    {
+        $categoryId = (string) RamseyUuid::uuid4();
+        $genre = new Genre(
+            name:'Genre'
+        );
+
+        $this->assertIsArray($genre->categoriesId);
+        $this->assertCount(1, [$genre->categoriesId]);
+
+        $genre->addCategory(
+            categoryId: $categoryId
+        );
+
+        $genre->addCategory(
+            categoryId:$categoryId
+        );
+
+        $this->assertCount(2, $genre->categoriesId);
+    }
+
+    public function testRemoveCategoryToGenre()
+    {
+        $categoryId = (string) RamseyUuid::uuid4();
+        $categoryId2 = (string) RamseyUuid::uuid4();
+        $genre = new Genre(
+            name:'Genre',
+            categoriesId:[
+                $categoryId,
+                $categoryId2,
+            ]
+        );
+
+        $this->assertCount(2, $genre->categoriesId);
+
+        $genre->removeCategory(
+            categoryId: $categoryId2
+        );
+
+        //dd($categoryId, $genre->categoriesId[0]);
+
+        $this->assertCount(1, [count($genre->categoriesId)]);
+        $this->assertCount(1, $genre->categoriesId);
+        $this->assertEquals($categoryId, $genre->categoriesId[0]);
     }
 }

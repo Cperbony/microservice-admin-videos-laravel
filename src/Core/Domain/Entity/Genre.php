@@ -12,11 +12,13 @@ class Genre
 {
     use MethodsMagicsTraits;
 
+
     /**
      * @param string $id
      * @param string $name
      * @param string $description
      * @param bool $isActive
+     * @param array $categoriesId
      * @throws EntityValidationException
      */
 
@@ -24,7 +26,8 @@ class Genre
         protected string $name,
         protected ?Uuid $id = null,
         protected bool $isActive = true,
-        protected ?DateTime $createdAt = null
+        protected ?DateTime $createdAt = null,
+        protected array $categoriesId = []
     ) {
         $this->id = $this->id ?? Uuid::random();
         $this->createdAt = $this->createdAt ?? new DateTime();
@@ -47,6 +50,16 @@ class Genre
     {
         $this->name = $name;
         $this->validate();
+    }
+
+    public function addCategory(string $categoryId)
+    {
+        array_push($this->categoriesId, $categoryId);
+    }
+
+    public function removeCategory(string $categoryId)
+    {
+        unset($this->categoriesId[array_search($categoryId, $this->categoriesId)]);
     }
 
     /**
