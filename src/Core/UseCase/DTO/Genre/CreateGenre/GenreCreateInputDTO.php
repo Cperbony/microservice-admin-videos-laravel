@@ -6,7 +6,7 @@ class GenreCreateInputDTO
 {
     public function __construct(
         public string $name,
-        public string $description = '',
+        public array $categoriesId = [],
         public bool $isActive = true,
     ) {
     }
