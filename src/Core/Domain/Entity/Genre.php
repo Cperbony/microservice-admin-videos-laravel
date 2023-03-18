@@ -26,8 +26,8 @@ class Genre
         protected string $name,
         protected ?Uuid $id = null,
         protected bool $isActive = true,
+        protected array $categoriesId = [],
         protected ?DateTime $createdAt = null,
-        protected array $categoriesId = []
     ) {
         $this->id = $this->id ?? Uuid::random();
         $this->createdAt = $this->createdAt ?? new DateTime();
@@ -38,7 +38,6 @@ class Genre
     public function activate()
     {
         $this->isActive = true;
-
     }
 
     public function deactivate()
