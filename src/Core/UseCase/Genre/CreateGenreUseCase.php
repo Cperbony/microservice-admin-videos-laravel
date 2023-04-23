@@ -9,26 +9,26 @@ use Core\Domain\Repository\GenreRepositoryInterface;
 use Core\UseCase\DTO\Genre\CreateGenre\GenreCreateInputDTO;
 use Core\UseCase\DTO\Genre\CreateGenre\GenreCreateOutputDTO;
 use Core\UseCase\interfaces\TransactionInterface;
-use Throwable;
 
 class CreateGenreUseCase
 {
     protected $repository;
+
     protected $transaction;
+
     protected $categoryRepository;
 
-    // injetar a interface para fazer posteriormente um bind
     public function __construct(
         GenreRepositoryInterface $repository,
         TransactionInterface $transaction,
-        CategoryRepositoryInterface $categoryRepository
+        CategoryRepositoryInterface $categoryRepository,
     ) {
         $this->repository = $repository;
         $this->transaction = $transaction;
         $this->categoryRepository = $categoryRepository;
     }
 
-    public function execute(GenreCreateInputDTO $input): GenreCreateOutputDTO
+    public function execute(GenreCreateInputDto $input): GenreCreateOutputDto
     {
         try {
             $genre = new Genre(
@@ -37,36 +37,38 @@ class CreateGenreUseCase
                 categoriesId:$input->categoriesId
             );
 
-            $this->validatecategoriesId($input->categoriesId);
+            $this->validateCategoriesId($input->categoriesId);
 
             $genreDb = $this->repository->insert($genre);
 
-            return new GenreCreateOutputDTO(
-                id:$genreDb->id(),
-                name:$genreDb->name,
-                is_active:$genreDb->isActive,
-                created_at:$genreDb->createdAt()
-            );
-
             $this->transaction->commit();
 
-        } catch (Throwable $th) {
+            return new GenreCreateOutputDto(
+                id:(string) $genreDb->id,
+                name:$genreDb->name,
+                is_active:$genreDb->isActive,
+                created_at:$genreDb->createdAt(),
+            );
+        } catch (\Throwable$th) {
             $this->transaction->rollback();
             throw $th;
         }
     }
 
-    public function validatecategoriesId(array $categoriesId = [])
+    public function validateCategoriesId(array $categoriesId = [])
     {
-        $categoriesDb = $this->categoryRepository->getIdsListsIds($categoriesId);
+        $categoriesDb = $this->categoryRepository->getIdsListIds($categoriesId);
 
-        if (count($categoriesDb) !== count($categoriesId)) {
-            throw new NotFoundException('categories not found');
+        $arrayDiff = array_diff($categoriesId, $categoriesDb);
+
+        if (count($arrayDiff)) {
+            $msg = sprintf(
+                '%s %s not found',
+                count($arrayDiff) > 1 ? 'Categories' : 'Category',
+                implode(', ', $arrayDiff)
+            );
+
+            throw new NotFoundException($msg);
         }
-
-        //foreach ($categoriesDb as $category) {
-
-        //}
-
     }
 }

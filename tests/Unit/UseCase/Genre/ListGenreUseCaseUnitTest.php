@@ -41,7 +41,7 @@ class ListGenreUseCaseUnitTest extends TestCase
 
         $response = $useCase->execute($mockInputDto);
 
-        $this->$this->assertInstanceOf(GenreOutputDTO::class, $response);
+        $this->assertInstanceOf(GenreOutputDTO::class, $response);
 
         Mockery::close();
     }
