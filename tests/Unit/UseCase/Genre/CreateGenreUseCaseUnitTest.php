@@ -34,7 +34,11 @@ class CreateGenreUseCaseUnitTest extends TestCase
 
         $uuid = (string) Uuid::uuid4();
 
-        $useCase = new CreateGenreUseCase($this->mockRepository($uuid, 0), $this->mockTransaction(), $this->mockCategoryRepository($uuid));
+        $useCase = new CreateGenreUseCase(
+            $this->mockRepository($uuid, 0),
+            $this->mockTransaction(),
+            $this->mockCategoryRepository($uuid)
+        );
         $useCase->execute($this->mockCreateInputDto([$uuid, 'fake_value']));
     }
 
@@ -52,8 +56,8 @@ class CreateGenreUseCaseUnitTest extends TestCase
     {
         $mockRepository = Mockery::mock(stdClass::class, GenreRepositoryInterface::class);
         $mockRepository->shouldReceive('insert')
-                        ->times($timesCalled)
-                        ->andReturn($this->mockEntity($uuid));
+            ->times($timesCalled)
+            ->andReturn($this->mockEntity($uuid));
 
         return $mockRepository;
     }

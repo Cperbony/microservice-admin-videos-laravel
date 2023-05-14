@@ -2,17 +2,18 @@
 
 namespace Tests\Unit\App\Models;
 
-use App\Models\Category;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Tests\Unit\App\Models\ModelTestCase;
 
-class CategoryUnitTest extends ModelTestCase
+use App\Models\Genre;
+use Illuminate\Database\Eloquent\Model;
+use Tests\Unit\App\Models\ModelTestCase;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class GenreUnitTest extends ModelTestCase
 {
     protected function model(): Model
     {
-        return new Category();
+        return new Genre();
     }
 
     protected function traits(): array
@@ -28,16 +29,17 @@ class CategoryUnitTest extends ModelTestCase
         return [
             'id',
             'name',
-            'description',
             'is_active',
+            'created_at'
         ];
     }
+
 
     protected function casts(): array
     {
         return [
-            'id' => 'string',
-            'is_active' => 'boolean',
+            'id'         => 'string',
+            'is_active'  => 'boolean',
             'deleted_at' => 'datetime',
         ];
     }

@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Category extends Model
+class Genre extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -14,8 +15,8 @@ class Category extends Model
     protected $fillable = [
         'id',
         'name',
-        'description',
         'is_active',
+        'created_at'
     ];
 
     public $incrementing = false;
@@ -26,8 +27,8 @@ class Category extends Model
         'deleted_at' => 'datetime',
     ];
 
-    public function genres()
+    public function categories()
     {
-        return $this->belongsToMany(Genre::class);
+        return $this->belongsToMany(Category::class);
     }
 }
