@@ -33,8 +33,9 @@ class UpdateGenreUseCase
 
         try {
             $genre->update(
-                name:$input->name,
+                name: $input->name,
             );
+
             foreach ($input->categoriesId as $categoryId) {
                 $genre->addCategory($categoryId);
             }
@@ -46,12 +47,13 @@ class UpdateGenreUseCase
             $this->transaction->commit();
 
             return new GenreUpdateOutputDto(
-                id:(string) $genreDb->id,
-                name:$genreDb->name,
-                is_active:$genreDb->isActive,
-                created_at:$genreDb->createdAt(),
+                id: (string) $genreDb->id,
+                name: $genreDb->name,
+                is_active: $genreDb->isActive,
+                created_at: $genreDb->createdAt(),
             );
-        } catch (\Throwable$th) {
+
+        } catch (\Throwable $th) {
             $this->transaction->rollback();
             throw $th;
         }

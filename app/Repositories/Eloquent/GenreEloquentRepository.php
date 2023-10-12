@@ -94,6 +94,10 @@ class GenreEloquentRepository implements GenreRepositoryInterface
             'name' => $genre->name,
             'is_active' => $genre->isActive,
         ]);
+        
+        if (count($genre->categoriesId) > 0) {
+          $genreDb->categories()->sync($genre->categoriesId);
+        }
 
         $genreDb->refresh();
 
@@ -114,9 +118,9 @@ class GenreEloquentRepository implements GenreRepositoryInterface
         //dd($object->createdAt);
         /** @var GenreEntity $genre */
         $entity = new GenreEntity(
-            id:new Uuid($object->id),
-            name:$object->name,
-            createdAt:new DateTime($object->created_at)
+            id: new Uuid($object->id),
+            name: $object->name,
+            createdAt: new DateTime($object->created_at)
         );
 
         ((bool) $object->is_active) ? $entity->activate() : $entity->deactivate();
